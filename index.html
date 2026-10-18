@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tablero de resultados · Escuela Normal Superior del Nordeste</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap">
+<style>
+:root{--bg:#f4f6f9;--surf:#fff;--ink:#16263a;--mut:#5a6a7e;--line:#d8dee7;--acc:#1d4e89;--hi:#1a8f55;--me:#c97d06;--lo:#c8382f;--hib:#dff2e7;--meb:#fbecd0;--lob:#f7dcd9;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1824;--surf:#172334;--ink:#e6edf6;--mut:#9aabc0;--line:#2a3a50;--acc:#7fb2ee;--hi:#4cc486;--me:#e8a53a;--lo:#ef6d63;--hib:#173a2a;--meb:#3b2e12;--lob:#40201e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1824;--surf:#172334;--ink:#e6edf6;--mut:#9aabc0;--line:#2a3a50;--acc:#7fb2ee;--hi:#4cc486;--me:#e8a53a;--lo:#ef6d63;--hib:#173a2a;--meb:#3b2e12;--lob:#40201e;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:28px 20px 8px;max-width:1100px;margin:0 auto}
+h1{font:600 clamp(24px,4vw,36px)/1.15 Fraunces,Georgia,serif;margin:0 0 6px}
+header p{margin:0;color:var(--mut);max-width:70ch}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-top:16px}
+nav div{max-width:1100px;margin:0 auto;padding:0 12px;display:flex;gap:4px;overflow-x:auto}
+nav button{border:0;background:none;color:var(--mut);font:600 15px/1 inherit;padding:14px 12px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+nav button[aria-selected=true]{color:var(--ink);border-color:var(--acc)}
+button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+main{max-width:1100px;margin:0 auto;padding:20px}
+section[hidden]{display:none}
+h2{font:600 22px/1.2 Fraunces,Georgia,serif;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 16px;max-width:75ch}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:18px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:12px}
+.kpi{background:var(--surf);border:1px solid var(--line);border-left:6px solid var(--acc);border-radius:6px;padding:12px 14px}
+.kpi b{font:600 28px/1 Fraunces,Georgia,serif;display:block}
+.kpi span{color:var(--mut);font-size:14px}
+.kpi.hi{border-left-color:var(--hi)}.kpi.me{border-left-color:var(--me)}.kpi.lo{border-left-color:var(--lo)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.chips button{border:1px solid var(--line);background:var(--surf);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 14px/1 inherit;cursor:pointer}
+.chips button[aria-pressed=true]{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.rows{display:grid;gap:4px}
+.row{display:grid;grid-template-columns:minmax(120px,210px) 1fr 48px;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-radius:6px;padding:6px 8px;cursor:pointer;color:var(--ink);font:inherit}
+.row:hover,.row[aria-expanded=true]{background:var(--surf)}
+.track{position:relative;height:16px;background:var(--line);border-radius:4px;overflow:hidden}
+.track i{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
+.track u{position:absolute;top:-2px;bottom:-2px;width:0;border-left:2px dashed var(--ink);opacity:.55}
+.val{font-weight:700;text-align:right}
+.lbl{font-size:15px}
+.legend{font-size:13px;color:var(--mut);margin:8px 0 0}
+.detail{margin-top:14px;border-left:6px solid var(--acc);background:var(--surf);border-radius:6px;padding:14px 18px}
+.detail h3{margin:0 0 6px;font:600 18px/1.2 Fraunces,Georgia,serif}
+.detail p{margin:6px 0}
+.tag{display:inline-block;border-radius:4px;padding:1px 8px;font-size:13px;font-weight:700}
+.tag.hi{background:var(--hib);color:var(--hi)}.tag.me{background:var(--meb);color:var(--me)}.tag.lo{background:var(--lob);color:var(--lo)}
+.warn{background:var(--meb);border-radius:6px;padding:10px 14px;margin:0 0 14px;font-size:15px}
+.dum{margin:14px 0}.dum h4{margin:0 0 6px;font-size:15px}
+.dline{position:relative;height:30px}
+.dline:before{content:"";position:absolute;left:0;right:0;top:14px;height:2px;background:var(--line)}
+.dot{position:absolute;top:5px;width:20px;height:20px;margin-left:-10px;border-radius:50%;color:#fff;font:700 11px/20px inherit;text-align:center}
+.dE{background:#1d4e89}.dD{background:#8a4fa0}.dV{background:#177a73}.dP{background:#a34a1f}
+.key{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--mut)}
+.key b{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;margin-right:4px}
+.le{display:grid;gap:10px}
+.leh{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.hz{font-size:13px;color:var(--mut)}
+.bm{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;margin-top:6px}
+.bar2{position:relative;height:10px;background:var(--line);border-radius:5px}
+.bar2 i{position:absolute;top:0;bottom:0;left:0;background:var(--acc);border-radius:5px;opacity:.45}
+.bar2 s{position:absolute;top:-3px;bottom:-3px;width:3px;background:var(--ink)}
+footer{max-width:1100px;margin:0 auto;padding:10px 20px 40px;color:var(--mut);font-size:13px}
+@media (max-width:560px){.row{grid-template-columns:100px 1fr 40px}}
+</style>
+</head>
+<body>
+<header>
+<h1>Transformación digital en la Escuela Normal Superior del Nordeste</h1>
+<p>Resultados del diagnóstico de competencias digitales con directivos, docentes y estudiantes. Yolombó, Antioquia · Nodo 1. Corte de datos: 19 de septiembre de 2026.</p>
+</header>
+<nav><div role="tablist" id="tabs"></div></nav>
+<main id="main"></main>
+<footer>Los índices (0 a 100) expresan autopercepción y provienen del PETD institucional. Semáforo: Bajo menor a 50, Medio de 50 a 70, Alto mayor a 70. Maestrante: Kevin David Martínez Contreras · Maestría en Educación Virtual, Universidad de Manizales.</footer>
+<script>
+const D={
+est:{t:"Estudiantes de secundaria y media",n:"n = 36 · dato concluyente · índice del grupo 64,0",c:null,d:[["Privacidad",81.2],["Motivación",77.8],["Seguridad digital",74.1],["Percepción pedagógica",72.0],["Autonomía digital",68.1],["Aprendizaje digital",68.1],["Integración pedagógica",64.6],["Ciudadanía digital",63.9],["Colaboración digital",60.4],["Pensamiento crítico",59.7],["Alfabetización informacional",55.6],["Creación de contenidos",54.5],["Conectividad",53.5],["Acceso digital",47.6]]},
+pri:{t:"Estudiantes de primaria",n:"n = 7 · dato insuficiente · índice del grupo 54,3",c:"Con solo 7 respuestas estos datos son orientativos: no sustentan decisiones por sí solos. Se deben contrastar con observación de aula y ampliar la muestra a 30 o más.",d:[["Tecnología en clase",78.6],["Seguridad y cuidado en internet",67.9],["Búsqueda y uso de información",53.6],["Acceso a tecnología",39.3],["Uso creativo y autonomía",32.1]]},
+doc:{t:"Docentes",n:"n = 27 de 29 esperados · dato referencial · índice del grupo 57,3",c:null,d:[["Disposición al cambio",79.6],["Infraestructura",71.3],["Conectividad",66.7],["Ciudadanía digital",66.7],["Comunidad de práctica",60.2],["Formación continua",58.3],["Uso de recursos",55.6],["Personalización",54.6],["Retroalimentación",54.6],["Creación de recursos",53.7],["Privacidad",51.9],["Colaboración",50.9],["Diseño pedagógico",49.1],["Evidencia de aprendizaje",48.1],["Ética digital",43.5],["Evaluación digital",42.6]]},
+dir:{t:"Directivos docentes",n:"n = 4 de 4 · censo directivo · índice del grupo 77,3",c:null,d:[["Gestión digital",93.8],["Articulación institucional",87.5],["Priorización",87.5],["Liderazgo directivo",87.5],["Reconocimiento",87.5],["Ética y privacidad de datos",87.5],["Metas estratégicas",81.2],["Reflexión institucional",81.2],["Pertinencia de la formación",81.2],["Uso de datos",81.2],["Sostenibilidad",81.2],["Cultura de innovación",75.0],["Dotación tecnológica",68.8],["Conectividad",68.8],["Acompañamiento docente",68.8],["Seguimiento",68.8],["Evaluación de impacto",68.8],["Planes de formación",62.5],["Alianzas y redes",50.0]]}
+};
+const X={ // detalle: [evidencia, aplicabilidad, siguiente paso (PETD)]
+"est|Privacidad":["Supera en 29,3 puntos a los docentes (51,9).","Estudiantes como pares formadores en ciudadanía digital.","IND12: subir de 81,2 a 96,2. Línea LE4."],
+"est|Acceso digital":["Única dimensión baja del grupo. Hay 23 equipos dados de baja; piden un dispositivo por estudiante.","Rotar y compartir los recursos existentes mientras llega la reposición.","LE2, acciones A4 a A6; IND5 y IND6."],
+"est|Conectividad":["Es el valor más bajo entre los tres actores.","Planear actividades con alternativas sin conexión, como Moodle local.","LE2, acción A5."],
+"est|Creación de contenidos":["54,5: el grupo se percibe en desarrollo y pide más trabajos digitales y menos cuaderno.","Proyectos de producción digital ligados a las ferias de ciencia y tecnología.","LE3 y LE4."],
+"pri|Acceso a tecnología":["39,3, dato orientativo. Docentes y niños piden una sala de sistemas propia para primaria.","Turnos equitativos de uso de la sala habilitada.","IND4: subir a 54,3. LE2, acción A6."],
+"pri|Uso creativo y autonomía":["32,1, el índice más bajo de todo el diagnóstico.","Experiencias de creación sencilla: historietas digitales, audios, Scratch.","IND7: subir a 47,1. LE3, acciones A7 a A9."],
+"pri|Tecnología en clase":["78,6: experiencia positiva con la tecnología en el aula.","Pasar del uso para ver contenidos al uso para crear.","IND9: subir a 93,6."],
+"doc|Evaluación digital":["La dimensión docente más baja y prioridad 1 del plan.","Rúbricas en línea, cuestionarios interactivos y portafolios en Classroom y Moodle.","IND1: subir de 42,6 a 57,6. LE1, acciones A1 a A3."],
+"doc|Ética digital":["43,5, junto a privacidad de 51,9, frente a 81,2 de los estudiantes.","Formación docente en protección de datos de terceros.","LE4, acciones A10 a A12; IND20."],
+"doc|Privacidad":["Brecha de 29,3 puntos con los estudiantes. Se lee como diferencia de rol, no como contradicción.","Protocolo institucional de tratamiento de datos.","LE4."],
+"doc|Disposición al cambio":["La fortaleza más alta del grupo, aunque el dato es referencial.","Comunidades de práctica y formación situada.","IND14: subir de 79,6 a 94,6."],
+"doc|Infraestructura":["71,3 por las pantallas en aula, pero choca con el acceso estudiantil de 47,6.","Aclarar si los docentes se refieren a pantallas o a equipos.","LE2."],
+"doc|Conectividad":["Tema más repetido en lo cualitativo: arriesgado planear actividades con internet.","Plan de contingencia con contenidos descargados.","LE2, acción A5; IND5."],
+"dir|Alianzas y redes":["50,0, la dimensión más baja del grupo.","Convenios con Secretaría de Educación, universidades y red de Normales.","LE5, acción A15."],
+"dir|Seguimiento":["68,8: hay monitoreo en desarrollo.","Sesiones directivas de seguimiento del PETD.","IND16. LE5, acción A14."],
+"dir|Gestión digital":["93,8, la dimensión más alta de todo el diagnóstico.","El liderazgo modela y respalda el plan.","LE5, acción A13."],
+"dir|Dotación tecnológica":["68,8. La reposición de equipos depende de la gestión del rector.","Priorizar primaria en la reposición.","LE2, acciones A4 y A5."],
+"dir|Planes de formación":["62,5: formación sin plan formal.","Plan operativo anual de formación docente.","IND17. LE1 y LE5."]
+};
+const sem=v=>v>70?"hi":v>=50?"me":"lo";
+const sn={hi:"Alto",me:"Medio",lo:"Bajo"};
+const fm=v=>v.toFixed(1).replace(".",",");
+const tabs=[["res","Resumen"],["est","Estudiantes"],["pri","Primaria"],["doc","Docentes"],["dir","Directivos"],["ruta","Ruta del plan"]];
+const st={tab:"res",f:{est:"all",pri:"all",doc:"all",dir:"all"},open:{}};
+function arc(a0,a1,r){const p=a=>[(110+r*Math.cos(Math.PI*(1-a/100))).toFixed(1),(110-r*Math.sin(Math.PI*(1-a/100))).toFixed(1)];const s=p(a0),e=p(a1);return `M${s[0]} ${s[1]}A${r} ${r} 0 0 1 ${e[0]} ${e[1]}`}
+function gauge(){const v=61.4,a=Math.PI*(1-v/100),x=(110+78*Math.cos(a)).toFixed(1),y=(110-78*Math.sin(a)).toFixed(1);
+const seg=[[0,35,"var(--lo)"],[35,55,"var(--me)"],[55,75,"#8fbf2a"],[75,100,"var(--hi)"]].map(s=>`<path d="${arc(s[0],s[1],90)}" stroke="${s[2]}" stroke-width="16" fill="none"/>`).join("");
+return `<svg viewBox="0 0 220 135" role="img" aria-label="Índice global 61,4 de 100, nivel Integración" style="max-width:300px;width:100%">${seg}<line x1="110" y1="110" x2="${x}" y2="${y}" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/><circle cx="110" cy="110" r="6" fill="var(--ink)"/><text x="110" y="132" text-anchor="middle" font-size="22" font-weight="700" fill="var(--ink)">61,4</text></svg>`}
+function dum(t,pts){return `<div class="dum"><h4>${t}</h4><div class="dline">${pts.map(p=>`<span class="dot d${p[0]}" style="left:${p[1]}%" title="${p[2]}: ${fm(p[1])}">${p[0]}</span>`).join("")}</div><div class="key">${pts.map(p=>`<span>${p[2]}: <b style="background:none;color:inherit;width:auto;height:auto;font-weight:700">${fm(p[1])}</b></span>`).join("")}</div></div>`}
+function resumen(){let c={hi:0,me:0,lo:0};Object.values(D).forEach(g=>g.d.forEach(r=>c[sem(r[1])]++));
+return `<h2>Dónde está la institución</h2><p class="sub">Nivel de madurez Integración: la tecnología ya se articula con la pedagogía y la gestión, con condiciones para avanzar hacia prácticas más innovadoras. Respondieron 74 personas.</p>
+<div class="grid g2"><div class="card" style="text-align:center"><h3 style="margin:0 0 6px;font-size:16px">Índice global de la institución</h3>${gauge()}<p class="legend">Cortes: Emergente 0–34 · Exploración 35–54 · Integración 55–74 · Innovación 75–100</p></div>
+<div class="card"><h3 style="margin:0 0 6px;font-size:16px">Índice por grupo</h3>
+<div class="kpis" style="margin-top:0"><div class="kpi hi"><b>77,3</b><span>Directivos (censo)</span></div><div class="kpi"><b>64,0</b><span>Estudiantes de secundaria y media</span></div><div class="kpi me"><b>57,3</b><span>Docentes (referencial)</span></div><div class="kpi"><b>54,3</b><span>Primaria (dato insuficiente)</span></div></div>
+<p class="legend">${c.hi} dimensiones en nivel Alto, ${c.me} en Medio y ${c.lo} en Bajo (54 dimensiones en total).</p></div></div>
+<h2 style="margin-top:28px">Lo que cada grupo ve distinto</h2><p class="sub">E estudiantes, D docentes, V directivos, P primaria. Cada punto es un índice de 0 a 100.</p>
+<div class="card">${dum("Privacidad: la mayor divergencia, 29,3 puntos",[["E",81.2,"Estudiantes"],["D",51.9,"Docentes"]])}
+${dum("Conectividad: los tres grupos coinciden en nivel Medio",[["E",53.5,"Estudiantes"],["D",66.7,"Docentes"],["V",68.8,"Directivos"]])}
+${dum("Infraestructura frente a acceso: lo que dicen docentes y estudiantes",[["P",39.3,"Acceso primaria"],["E",47.6,"Acceso secundaria"],["D",71.3,"Infraestructura docente"]])}
+${dum("Ciudadanía digital: nivel intermedio compartido",[["E",63.9,"Estudiantes"],["D",66.7,"Docentes"]])}</div>
+<div class="card" style="margin-top:16px"><h3 style="margin:0 0 6px;font-size:16px">Lectura</h3><p style="margin:0">Hay una base favorable: liderazgo directivo comprometido, docentes dispuestos al cambio y estudiantes con alta conciencia de privacidad. Las condiciones de acceso, con 23 equipos dados de baja, y la evaluación digital docente son las brechas más urgentes.</p></div>`}
+function grupo(k){const g=D[k],f=st.f[k];const rows=g.d.filter(r=>f==="all"||sem(r[1])===f);const chip=(v,l)=>`<button data-f="${v}" aria-pressed="${f===v}">${l}</button>`;
+const sel=st.open[k];
+let det="";if(sel){const r=g.d.find(x=>x[0]===sel),s=sem(r[1]),x=X[k+"|"+sel]||[
+s==="hi"?"Fortaleza percibida por el grupo.":s==="me"?"Dimensión en desarrollo: reconocida pero no consolidada.":"Brecha prioritaria del grupo.",
+s==="hi"?"Apalancarla como punto de apoyo del plan.":"Incorporarla en las actividades de aula y en la formación.","Ver las líneas del plan en la pestaña Ruta."];
+det=`<div class="detail" aria-live="polite"><h3>${r[0]} · ${fm(r[1])} <span class="tag ${s}">${sn[s]}</span></h3><p><b>Evidencia:</b> ${x[0]}</p><p><b>Aplicación en la institución:</b> ${x[1]}</p><p><b>Siguiente paso en el PETD:</b> ${x[2]}</p></div>`}
+return `<h2>${g.t}</h2><p class="sub">${g.n}</p>${g.c?`<div class="warn">${g.c}</div>`:""}
+<div class="chips" role="group" aria-label="Filtrar por semáforo">${chip("all","Todas ("+g.d.length+")")}${chip("hi","Alto")}${chip("me","Medio")}${chip("lo","Bajo")}</div>
+<div class="rows">${rows.map(r=>{const s=sem(r[1]);return `<button class="row" data-d="${r[0]}" aria-expanded="${sel===r[0]}"><span class="lbl">${r[0]}</span><span class="track"><i style="width:${r[1]}%;background:var(--${s})"></i><u style="left:50%"></u><u style="left:70%"></u></span><span class="val" style="color:var(--${s})">${fm(r[1])}</span></button>`}).join("")||"<p>No hay dimensiones en este nivel.</p>"}</div>
+<p class="legend">Las líneas punteadas marcan los cortes en 50 y 70. Toca una dimensión para ver su detalle.</p>${det}`}
+const LE=[["LE1","Evaluación y retroalimentación con mediación digital","corto",[["IND1 · Evaluación digital docente",42.6,57.6]]],
+["LE2","Acceso a tecnología y conectividad","corto",[["IND4 · Acceso en primaria",39.3,54.3]]],
+["LE3","Creación de contenidos y uso creativo en primaria","mediano",[["IND7 · Uso creativo en primaria",32.1,47.1],["IND9 · Tecnología en clase, primaria",78.6,93.6]]],
+["LE4","Pensamiento crítico y alfabetización informacional","mediano",[["IND12 · Privacidad estudiantil",81.2,96.2]]],
+["LE5","Liderazgo y planeación estratégica digital","mediano",[["IND14 · Disposición docente al cambio",79.6,94.6]]]];
+function ruta(){return `<h2>Ruta del plan</h2><p class="sub">Cinco líneas estratégicas del PETD, con la línea base de cada indicador de percepción (punto negro) y su meta (borde de la barra).</p><div class="le">${LE.map(l=>`<div class="card"><div class="leh"><h3 style="margin:0;font-size:17px">${l[0]} · ${l[1]}</h3><span class="hz">Horizonte ${l[2]}</span></div>${l[3].map(m=>`<div class="bm"><div><div>${m[0]}</div><div class="bar2" role="img" aria-label="Línea base ${fm(m[1])}, meta ${fm(m[2])}"><i style="width:${m[2]}%"></i><s style="left:${m[1]}%"></s></div></div><span>${fm(m[1])} → ${fm(m[2])}</span></div>`).join("")}</div>`).join("")}</div><p class="legend">Cada meta suma 15 puntos sobre la línea base. Los demás indicadores son de proceso y su línea base está por establecer.</p>`}
+function render(){document.getElementById("tabs").innerHTML=tabs.map(t=>`<button role="tab" data-t="${t[0]}" aria-selected="${st.tab===t[0]}">${t[1]}</button>`).join("");
+const m=document.getElementById("main");m.innerHTML=st.tab==="res"?resumen():st.tab==="ruta"?ruta():grupo(st.tab)}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-t]"),f=e.target.closest("[data-f]"),d=e.target.closest("[data-d]");
+if(t){st.tab=t.dataset.t;render();window.scrollTo(0,0)}
+else if(f){st.f[st.tab]=f.dataset.f;st.open[st.tab]=null;render()}
+else if(d){const k=st.tab;st.open[k]=st.open[k]===d.dataset.d?null:d.dataset.d;render()}});
+render();
+</script>
+</body>
+</html>
